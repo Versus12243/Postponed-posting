@@ -1,0 +1,14 @@
+﻿{
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "mapRoot": "./",
+    "module": "es6",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "target": "es6"
+  }
+}
