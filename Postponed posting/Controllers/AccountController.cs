@@ -8,7 +8,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using DAL.Models;
+using PostponedPosting.Domain.Entities.Identity;
+using PostponedPosting.Persistence.ServiceModel.ViewModels;
+using PostponedPosting.Helpers;
 
 namespace Postponed_posting.Controllers
 {
@@ -363,12 +365,14 @@ namespace Postponed_posting.Controllers
             {
                 // Get the information about the user from the external login provider
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
+
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);

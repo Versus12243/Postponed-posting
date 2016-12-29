@@ -81,6 +81,22 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -129,6 +145,10 @@
     </Reference>
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -202,6 +222,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -227,6 +248,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -287,9 +314,25 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DAL\DAL.csproj">
+    <ProjectReference Include="..\DAL\PostponedPosting.Domain.csproj">
       <Project>{4c9b0224-4cf7-4f45-a6ff-63bb02deea4f}</Project>
-      <Name>DAL</Name>
+      <Name>PostponedPosting.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PostponedPosting.Domain.Core\PostponedPosting.Domain.Core.csproj">
+      <Project>{4db348d5-d5c4-4065-8b7d-6f74400ba571}</Project>
+      <Name>PostponedPosting.Domain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PostponedPosting.Helpers\PostponedPosting.Helpers.csproj">
+      <Project>{1a811b9f-6e36-45cc-8d2c-5f0ad272d544}</Project>
+      <Name>PostponedPosting.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PostponedPosting.Persistence.Data\PostponedPosting.Persistence.Data.csproj">
+      <Project>{BF06FF0B-9BDF-4302-93BF-C0AB98F69734}</Project>
+      <Name>PostponedPosting.Persistence.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PostponedPosting.Persistence.ServiceModel\PostponedPosting.Persistence.ServiceModel.csproj">
+      <Project>{f680918a-c9c1-469b-97e8-35b38ace7e74}</Project>
+      <Name>PostponedPosting.Persistence.ServiceModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

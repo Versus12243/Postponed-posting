@@ -5,7 +5,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using DAL.Models;
+using PostponedPosting.Persistence.Data;
+using PostponedPosting.Domain.Entities.Identity;
 
 namespace Postponed_posting
 {
@@ -15,7 +16,7 @@ namespace Postponed_posting
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(DataContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
@@ -54,15 +55,15 @@ namespace Postponed_posting
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "190008478137131",
+               appSecret: "818f4255caa3084c3ea52cf5a5f16505");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "349182116678-e417dp90geleb926dfa7na86612mdppn.apps.googleusercontent.com",
+                ClientSecret = "wuBbHwLNHgCHBG-WfVyAsttm"
+            });
         }
     }
 }
