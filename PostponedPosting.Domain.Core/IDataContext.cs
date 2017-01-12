@@ -1,6 +1,7 @@
 ﻿using PostponedPosting.Domain.Entities;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace PostponedPosting.Domain.Core
 {
@@ -8,5 +9,6 @@ namespace PostponedPosting.Domain.Core
     {
         IDbSet<TEntity> Set<TEntity>() where TEntity : class;
         int SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

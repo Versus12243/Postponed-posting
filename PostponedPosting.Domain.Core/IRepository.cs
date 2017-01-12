@@ -11,6 +11,7 @@ namespace PostponedPosting.Domain.Core
         {
             T GetById(object id);
             void Insert(T entity);
+            Task InsertAsync(T entity);
             void Update(T entity);
             void Delete(T entity);
             IQueryable<T> Table { get; }

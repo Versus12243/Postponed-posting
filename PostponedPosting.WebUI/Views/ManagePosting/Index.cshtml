@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalCreatePost">Create post</button>
+
+<div id="modalCreatePost" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Post creating</h4>
+            </div>
+            <form id="createPostForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Enter content of post:</label>
+                        <div>
+                            <textarea name="Content" class="form-control max-w-100p" id="Content"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <input type="text" name="DateOfPublish" id="DateOfPublish" class="form-control max-w-100p" />
+                            <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+                <div class="modal-footer">
+                    <input type="button" id="createPostBtn" class="btn btn-default" value="Save"/>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>            
+        </div>
+    </div>
+</div>
+
+@Styles.Render("~/Content/datetimepicker")
+
+@section scripts{
+    @Scripts.Render("~/bundles/manage-posts")
+}

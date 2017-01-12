@@ -7,6 +7,8 @@ using PostponedPosting.Domain.Entities.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PostponedPosting.Domain.Entities.SocialNetworkModel;
 using PostponedPosting.Entities.CredentialModel;
+using PostponedPosting.Domain.Entities.PostModels;
+using System.Threading.Tasks;
 
 namespace PostponedPosting.Persistence.Data
 {
@@ -16,8 +18,10 @@ namespace PostponedPosting.Persistence.Data
         {
         }
 
-        public DbSet<Social_network> Social_networks { get; set; }
-        public DbSet<Access_token> Access_tokens { get; set; }
+        public DbSet<SocialNetwork> SocialNetworks { get; set; }
+        public DbSet<AccessToken> AccessTokens { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PagesGroup> PagesGroups { get; set; }
 
         public static DataContext Create()
         {
@@ -25,7 +29,13 @@ namespace PostponedPosting.Persistence.Data
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {          
+        {
+            modelBuilder.Entity<ApplicationUser>().HasMany(p => p.Posts).WithRequired(u => u.User).WillCascadeOnDelete(true);
+            modelBuilder.Entity<SocialNetwork>().HasMany(p => p.Posts).WithRequired(s => s.SocialNetwork).WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Post>().HasRequired(u => u.User);
+            modelBuilder.Entity<Post>().HasRequired(s => s.SocialNetwork);
+
             base.OnModelCreating(modelBuilder);
         }
 

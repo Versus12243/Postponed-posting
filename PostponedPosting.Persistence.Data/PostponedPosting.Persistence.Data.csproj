@@ -62,12 +62,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
+    <Compile Include="Migrations\201701030741310_sd.cs" />
+    <Compile Include="Migrations\201701030741310_sd.Designer.cs">
+      <DependentUpon>201701030741310_sd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701041028157_PagesGroup.cs" />
+    <Compile Include="Migrations\201701041028157_PagesGroup.Designer.cs">
+      <DependentUpon>201701041028157_PagesGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701111029081_rename_DateOfPublication_in_Post.cs" />
+    <Compile Include="Migrations\201701111029081_rename_DateOfPublication_in_Post.Designer.cs">
+      <DependentUpon>201701111029081_rename_DateOfPublication_in_Post.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701111436239_RenameTables.cs" />
+    <Compile Include="Migrations\201701111436239_RenameTables.Designer.cs">
+      <DependentUpon>201701111436239_RenameTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701111625119_fluentApiConfig.cs" />
+    <Compile Include="Migrations\201701111625119_fluentApiConfig.Designer.cs">
+      <DependentUpon>201701111625119_fluentApiConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DAL\PostponedPosting.Domain.csproj">
+    <ProjectReference Include="..\PostponedPosting.Domain\PostponedPosting.Domain.csproj">
       <Project>{4c9b0224-4cf7-4f45-a6ff-63bb02deea4f}</Project>
       <Name>PostponedPosting.Domain</Name>
     </ProjectReference>
@@ -79,6 +99,23 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201701030741310_sd.resx">
+      <DependentUpon>201701030741310_sd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701041028157_PagesGroup.resx">
+      <DependentUpon>201701041028157_PagesGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701111029081_rename_DateOfPublication_in_Post.resx">
+      <DependentUpon>201701111029081_rename_DateOfPublication_in_Post.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701111436239_RenameTables.resx">
+      <DependentUpon>201701111436239_RenameTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701111625119_fluentApiConfig.resx">
+      <DependentUpon>201701111625119_fluentApiConfig.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

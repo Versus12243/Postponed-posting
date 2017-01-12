@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DAL\PostponedPosting.Domain.csproj">
+    <ProjectReference Include="..\PostponedPosting.Domain\PostponedPosting.Domain.csproj">
       <Project>{4C9B0224-4CF7-4F45-A6FF-63BB02DEEA4F}</Project>
       <Name>PostponedPosting.Domain</Name>
     </ProjectReference>

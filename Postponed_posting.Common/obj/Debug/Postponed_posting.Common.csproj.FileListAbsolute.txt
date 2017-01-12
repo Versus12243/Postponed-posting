@@ -1,4 +1,0 @@
-C:\Projects\Postponed posting\Postponed_posting.Common\bin\Debug\Postponed_posting.Common.dll
-C:\Projects\Postponed posting\Postponed_posting.Common\bin\Debug\Postponed_posting.Common.pdb
-C:\Projects\Postponed posting\Postponed_posting.Common\obj\Debug\Postponed_posting.Common.dll
-C:\Projects\Postponed posting\Postponed_posting.Common\obj\Debug\Postponed_posting.Common.pdb
