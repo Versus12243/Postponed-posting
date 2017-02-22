@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +28,17 @@ namespace PostponedPosting.Persistence.Data
                 return this.Entities.Find(id);
             }
 
-            public void Insert(T entity)
+            public T Find(Expression<Func<T, bool>> predicate)
+            {
+                return this.Entities.FirstOrDefault(predicate);
+            }
+
+            public IQueryable<T> FindAll(Expression<Func<T, bool>> predicate)
+            {
+                return this.Entities.Where(predicate);
+            }
+
+        public void Insert(T entity)
             {
                 try
                 {
@@ -155,5 +166,9 @@ namespace PostponedPosting.Persistence.Data
                 }
             }
 
-        }
+            public IList<T> GetAll()
+            {
+                return this.Entities.ToList();
+            }
+    }
 }

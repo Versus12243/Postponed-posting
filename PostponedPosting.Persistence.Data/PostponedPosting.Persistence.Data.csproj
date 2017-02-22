@@ -62,25 +62,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201701030741310_sd.cs" />
-    <Compile Include="Migrations\201701030741310_sd.Designer.cs">
-      <DependentUpon>201701030741310_sd.cs</DependentUpon>
+    <Compile Include="Migrations\201702221150586_sd.cs" />
+    <Compile Include="Migrations\201702221150586_sd.Designer.cs">
+      <DependentUpon>201702221150586_sd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201701041028157_PagesGroup.cs" />
-    <Compile Include="Migrations\201701041028157_PagesGroup.Designer.cs">
-      <DependentUpon>201701041028157_PagesGroup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701111029081_rename_DateOfPublication_in_Post.cs" />
-    <Compile Include="Migrations\201701111029081_rename_DateOfPublication_in_Post.Designer.cs">
-      <DependentUpon>201701111029081_rename_DateOfPublication_in_Post.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701111436239_RenameTables.cs" />
-    <Compile Include="Migrations\201701111436239_RenameTables.Designer.cs">
-      <DependentUpon>201701111436239_RenameTables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201701111625119_fluentApiConfig.cs" />
-    <Compile Include="Migrations\201701111625119_fluentApiConfig.Designer.cs">
-      <DependentUpon>201701111625119_fluentApiConfig.cs</DependentUpon>
+    <Compile Include="Migrations\201702221156189_sd1.cs" />
+    <Compile Include="Migrations\201702221156189_sd1.Designer.cs">
+      <DependentUpon>201702221156189_sd1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository.cs" />
@@ -101,20 +89,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201701030741310_sd.resx">
-      <DependentUpon>201701030741310_sd.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201702221150586_sd.resx">
+      <DependentUpon>201702221150586_sd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701041028157_PagesGroup.resx">
-      <DependentUpon>201701041028157_PagesGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701111029081_rename_DateOfPublication_in_Post.resx">
-      <DependentUpon>201701111029081_rename_DateOfPublication_in_Post.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701111436239_RenameTables.resx">
-      <DependentUpon>201701111436239_RenameTables.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201701111625119_fluentApiConfig.resx">
-      <DependentUpon>201701111625119_fluentApiConfig.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201702221156189_sd1.resx">
+      <DependentUpon>201702221156189_sd1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

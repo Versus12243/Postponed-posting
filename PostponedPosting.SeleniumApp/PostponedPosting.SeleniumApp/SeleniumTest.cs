@@ -13,6 +13,10 @@ namespace PostponedPosting.SeleniumApp
         private string baseURL;
         private string _currentUserId;
 
+        public SeleniumModule()
+        {
+        }
+
         public SeleniumModule(string userId)
         {
             _currentUserId = userId;

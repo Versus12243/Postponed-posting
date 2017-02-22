@@ -16,6 +16,8 @@ namespace PostponedPosting.WebUI.App_Start
     using Persistence.ApplicationService.Services;
     using System.Web.Http;
     using Common.Extensions;
+    using Microsoft.AspNet.Identity;
+    using Domain.Entities.Identity;
 
     public static class NinjectWebCommon 
     {
@@ -73,7 +75,13 @@ namespace PostponedPosting.WebUI.App_Start
         {
             kernel.Bind<IDataContext>().To<DataContext>().InRequestScope();
             kernel.Bind(typeof(IRepository<>)).To(typeof(Repository<>)).InRequestScope();
+            kernel.Bind<IUser>().To<ApplicationUser>().InRequestScope();
             kernel.Bind<IPostingService>().To<PostingService>().InRequestScope();
+            kernel.Bind<ISocialNetworksService>().To<SocialNetworksService>().InRequestScope();
+            kernel.Bind<IUserService>().To<UserService>().InRequestScope();
+            kernel.Bind<ICryptoService>().To<CryptoService>().InRequestScope();
+            kernel.Bind<IGroupsOfLinksService>().To<GroupsOfLinksService>().InRequestScope();
+            kernel.Bind<ILinksService>().To<LinksService>().InRequestScope();
         }        
     }
 }

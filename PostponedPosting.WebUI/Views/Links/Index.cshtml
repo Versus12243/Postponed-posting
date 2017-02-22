@@ -1,0 +1,70 @@
+﻿@*@model PostponedPosting.Persistence.ServiceModel.ViewModels.LinksForGroupViewModel*@
+@{
+    ViewBag.Title = "Manage links";
+    int groupId = (int)ViewBag.GroupId;
+}
+
+<h2>@ViewBag.Title for group @ViewBag.GroupName</h2>
+
+@Html.Hidden("GroupId", groupId)
+
+<div class="row">
+    <div class="col-md-2">
+        <input type="button" class="btn btn-default m-b-10" id="add-link" value="Add link" />
+    </div>
+    <div class="col-md-6">
+        <input type="checkbox" id="showAllLinks" value="Show links from all groups" />
+        <span>Show links from all groups</span>
+    </div>
+</div>
+<table class="table table-bordered table-hover" id="list-of-links-datatable">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Exist in group</th>
+            <th>Name</th>
+            <th>Url</th>
+            <th>Date of creation</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div id="modal-edit-link" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <form id="add-link-form">
+                <div class="modal-body">
+                    @Html.Hidden("Id", "0")
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" id="name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Url:</label>
+                        <input type="text" id="url" />
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <input type="button" id="add-link-btn" class="btn btn-default" value="Add" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Styles.Render("~/Content/jquery-datatables")
+
+@section scripts{
+    @Scripts.Render("~/helpers/localDateCreator")
+    @Scripts.Render("~/bundles/jquery-datatables")
+    @Scripts.Render("~/custom/manageLinks")
+}
+

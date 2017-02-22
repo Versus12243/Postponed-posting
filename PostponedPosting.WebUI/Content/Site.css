@@ -23,6 +23,46 @@ textarea {
     max-width: 280px;
 }
 
+.h-150-strong{
+    height: 150px !important;
+}
+
+.max-h-150{
+    max-height: 150px;
+}
+
+.min-h-150{
+    min-height: 150px;
+}
+
 .max-w-100p{
     max-width: 100% !important;
+}
+
+.m-b-10{
+    margin-bottom: 10px;
+}
+
+.m-t-10{
+    margin-top: 10px;
+}
+
+.text-center-strong{
+    text-align: center !important;
+}
+
+.scroll-v-auto{
+    overflow-y: auto;
+}
+
+td.details-control {
+    background: url('DataTables/images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('DataTables/images/details_close.png') no-repeat center center;
+}
+
+.bold{
+   font-weight: 600;
 }

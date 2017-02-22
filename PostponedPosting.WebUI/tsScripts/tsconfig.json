@@ -1,0 +1,25 @@
+﻿{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "target": "es6",
+    "outDir": "../Scripts/Custom"
+  },
+   "devDependencies": {
+    "typescript": "^2.0.3"
+  },
+  "include": [
+    "Scripts/typings/jquery/jquery.d.ts",
+    "Scripts/typings/jqueryui/jqueryui.d.ts",
+    "Scripts/typings/jqueryui/moment/moment.d.ts",
+    "Scripts/typings/bootstrap/index.d.ts",
+    "Scripts/typings/bootstrap.v3.datetimepicker/bootstrap.v3.datetimepicker-3.0.0.d.ts",
+    "Scripts/typings/signalr/signalr.d.ts"
+    ]
+}

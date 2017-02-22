@@ -1,0 +1,11 @@
+﻿@model List<AvailableSocialNetworkViewModel>
+
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manage posting <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        @foreach (var sn in Model)
+        {
+            <li><a href="/ManagePosting/Index/@sn.SocialNetworkId">@sn.Name</a></li>
+        }
+    </ul>
+</li>

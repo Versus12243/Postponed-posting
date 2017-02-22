@@ -1,0 +1,65 @@
+﻿@model List<PostponedPosting.Persistence.ServiceModel.ViewModels.GroupOfLinksViewModel>
+@{
+    ViewBag.Title = "Manage groups of links";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<input type="button" class="btn btn-default m-b-10" id="create-group" value="Create group"/>
+
+<table id="groupsOfLinksTable" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date of create</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var group in Model)
+        {
+            <tr>
+                <td>@group.Name</td>
+                <td>@group.DateOfCreation.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <input type="button" data-id="@group.Id" class="btn btn-default edit-group-of-links" value="Edit name" />
+                    <input type="button" data-id="@group.Id" class="btn btn-default edit-links-from-group-of-links" value="Manage links" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="modal-edit-group" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <form id="edit-group-form">
+                <div class="modal-body">
+                    @Html.Hidden("Id")
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" id="name" />
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <input type="button" id="edit-group-btn" class="btn btn-default" value="Save" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Styles.Render("~/Content/jquery-datatables")
+
+@section scripts{
+    @Scripts.Render("~/helpers/localDateCreator")
+    @Scripts.Render("~/bundles/jquery-datatables")
+    @Scripts.Render("~/custom/manageGroupsOfLinks")
+}
+

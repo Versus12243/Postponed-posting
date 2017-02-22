@@ -1,27 +1,22 @@
 ﻿using PostponedPosting.Common.Extentions;
+using PostponedPosting.Domain.Entities.CredentialModel;
 using PostponedPosting.Domain.Entities.PostModels;
-using PostponedPosting.Entities.CredentialModel;
+using PostponedPosting.Domain.Entities.StatusEnums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace PostponedPosting.Domain.Entities.SocialNetworkModel
+namespace PostponedPosting.Domain.Entities.SocialNetworkModels
 {
-    public class SocialNetwork
+    public class SocialNetwork: BaseEntityWithName_and_Id
     {
-        [Key]
-        public int Id { get; set; }
-        public string Name { get; set; }
-
+        public virtual SocialNetworkAvailabily Aviability { get; set; }
+        public virtual EntityStatus Status { get; set; }
         public virtual ICollection<AccessToken> Access_tokens { get; set; }
-
-        public virtual ICollection<Page> Pages { get; set; }
-
         public virtual ICollection<Post> Posts { get; set; }
 
         public SocialNetwork()
         {
             Access_tokens = Access_tokens.Empty();
-            Pages = Pages.Empty();
             Posts = Posts.Empty();
         }
     }

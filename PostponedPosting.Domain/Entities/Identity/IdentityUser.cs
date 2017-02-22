@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using PostponedPosting.Common.Extentions;
-using PostponedPosting.Entities.CredentialModel;
-using PostponedPosting.Domain.Entities.SocialNetworkModel;
+using PostponedPosting.Domain.Entities.SocialNetworkModels;
 using System.Collections.Generic;
 using PostponedPosting.Domain.Entities.PostModels;
+using PostponedPosting.Domain.Entities.StatusEnums;
+using PostponedPosting.Domain.Entities.CredentialModel;
+using Microsoft.AspNet.Identity;
 
 namespace PostponedPosting.Domain.Entities.Identity
 {
@@ -11,14 +13,16 @@ namespace PostponedPosting.Domain.Entities.Identity
     {
         public virtual ICollection<AccessToken> Access_tokens { get; set; }
 
-        public virtual ICollection<Page> Pages { get; set; }
+        public virtual ICollection<GroupOfLinks> GroupsOfLinks { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
+
+        public virtual EntityStatus Status { get; set; }
 
         public ApplicationUser()
         {
             Access_tokens = Access_tokens.Empty();
-            Pages = Pages.Empty();
+            GroupsOfLinks = GroupsOfLinks.Empty();
             Posts = Posts.Empty();
         }
     }

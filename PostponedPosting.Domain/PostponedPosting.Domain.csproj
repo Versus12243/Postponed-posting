@@ -85,12 +85,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\BaseEntityWithName_and_Id.cs" />
     <Compile Include="Entities\CredentialModel\Access_token.cs" />
+    <Compile Include="Entities\CredentialModel\UserCredentials.cs" />
     <Compile Include="Entities\Identity\IdentityUser.cs" />
     <Compile Include="Entities\PostModels\Post.cs" />
-    <Compile Include="Entities\SocialNetworkModel\Page.cs" />
-    <Compile Include="Entities\SocialNetworkModel\PagesGroup.cs" />
-    <Compile Include="Entities\SocialNetworkModel\SocialNetwork.cs" />
+    <Compile Include="Entities\SocialNetworkModels\Link.cs" />
+    <Compile Include="Entities\SocialNetworkModels\GroupOfLinks.cs" />
+    <Compile Include="Entities\SocialNetworkModels\SocialNetwork.cs" />
+    <Compile Include="Entities\SocialNetworkModels\UserSocialNetwork.cs" />
+    <Compile Include="Entities\StatusEnums\EntityStatus.cs" />
+    <Compile Include="Entities\StatusEnums\PostStatus.cs" />
+    <Compile Include="Entities\StatusEnums\SocialNetworkAvailabily.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

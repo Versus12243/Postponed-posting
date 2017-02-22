@@ -23,5 +23,14 @@ namespace PostponedPosting.WebUI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+        
+        //internal protected void Application_BeginRequest(object sender, EventArgs e)
+        //{
+        //    // Get objects.
+        //    HttpContext context = base.Context;
+        //    HttpResponse response = context.Response;
+        //    // Complete.
+        //   // base.CompleteRequest();
+        //}
     }
 }

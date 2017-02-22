@@ -25,6 +25,11 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        Html.RenderAction("GetListOfSNsForPostingMenu", "SocialNetworks");
+                        <li>@Html.ActionLink("Social networks", "Index", "SocialNetworks")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -40,6 +45,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/toastr")
     @RenderSection("scripts", required: false)
 </body>
 </html>

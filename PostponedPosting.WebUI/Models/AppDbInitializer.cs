@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PostponedPosting.Persistence.Data
 {
-    public class AppDbInitializer : DropCreateDatabaseAlways<DataContext>
+    public class AppDbInitializer : CreateDatabaseIfNotExists<DataContext>
     {
         protected override void Seed(DataContext context)
         {

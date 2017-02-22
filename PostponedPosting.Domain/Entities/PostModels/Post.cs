@@ -1,33 +1,32 @@
 ﻿using PostponedPosting.Common.Extentions;
 using PostponedPosting.Domain.Entities.Identity;
-using PostponedPosting.Domain.Entities.SocialNetworkModel;
+using PostponedPosting.Domain.Entities.SocialNetworkModels;
+using PostponedPosting.Domain.Entities.StatusEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PostponedPosting.Domain.Entities.PostModels
 {
-    public class Post
+    public class Post: BaseEntityWithName_and_Id
     {
-        #region properties
-
-        public int Id { get; set; }
+        #region properties        
 
         public string Content { get; set; }
 
-        public DateTime DateOfCreate { get; set; }
+        public DateTime DateOfCreation { get; set; }
 
         public DateTime DateOfPublish { get; set; }
 
-        public bool IsActive { get; set; }
+        public virtual PostStatus SendingStatus { get; set; }
 
-        public bool IsReady { get; set; }
+        public virtual EntityStatus Status { get; set; }
 
         [ForeignKey("User")]
         public string UserId { get; set; }
 
         [ForeignKey("SocialNetwork")]
-        public int SocialNetworkId { get; set; }
+        public int SocialNetworkId { get; set; }       
 
         #endregion
 
@@ -35,15 +34,19 @@ namespace PostponedPosting.Domain.Entities.PostModels
 
         public virtual SocialNetwork SocialNetwork { get; set; }
 
-        public virtual ICollection<Page> Pages { get; set; }
+        public virtual ICollection<GroupOfLinks> GroupsOfLinks { get; set; } 
         
         public virtual ApplicationUser User { get; set; }
 
         #endregion
 
+        #region constructor
+
         public Post()
         {
-            Pages = Pages.Empty();
+            GroupsOfLinks = GroupsOfLinks.Empty();
         }
+
+        #endregion
     }
 }

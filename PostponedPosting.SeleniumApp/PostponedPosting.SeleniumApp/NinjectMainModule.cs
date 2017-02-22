@@ -12,38 +12,13 @@ using System.Threading.Tasks;
 
 namespace PostponedPosting.SeleniumApp
 {
-    public static class NinjectMainModule
+    public class NinjectBindings : Ninject.Modules.NinjectModule
     {
-        private static IKernel _kernel = null;       
-
-        private static IKernel GetKernel()
+        public override void Load()
         {
-            return _kernel ?? CreateKernel();
-        }
-
-        private static IKernel CreateKernel()
-        {
-            var kernel = new StandardKernel();
-            try
-            {
-                RegisterServices(kernel);               
-                return kernel;
-            }
-            catch
-            {
-                kernel.Dispose();
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private static void RegisterServices(IKernel kernel)
-        {
-            kernel.Bind<IDataContext>().To<DataContext>();
-            kernel.Bind(typeof(IRepository<>)).To(typeof(Repository<>));
+            Bind<IDataContext>().To<DataContext>();
+            Bind(typeof(IRepository<>)).To(typeof(Repository<>));
+            Bind<IPostingService>().To<PostingService>();
         }
     }
 }
