@@ -13,5 +13,7 @@ namespace PostponedPosting.Persistence.ServiceModel.ViewModels
         public string StatusOfSending { get; set; }
         public string Status { get; set; }
         public List<int> GroupsIds { get; set; }
+        public bool SendAfterSaving { get; set; }
+        public int SocialNetworkId { get; set; }
     }
 }

@@ -57,9 +57,14 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Date of publish:</label>
-                                <div class="input-group date">
-                                    <input type="text" name="DateOfPublish" id="DateOfPublish" class="form-control max-w-100p" />
+                                <input type="radio" name="date-of-sending-rbtn" data-value="true" checked/>
+                                <label>Send after saving</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="radio" name="date-of-sending-rbtn" data-value="false"/>
+                                <label>Set date of publish:</label>
+                                <div class="input-group date hidden">
+                                    <input type="text" name="DateOfPublish" id="DateOfPublish" class="form-control max-w-100p"/>
                                     <span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>
                                 </div>
                             </div>

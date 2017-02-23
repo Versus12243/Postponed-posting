@@ -11,5 +11,7 @@ namespace PostponedPosting.Persistence.ServiceModel.ViewModels
     {
         public int PostId { get; set; }
         public int SocialNetworkId { get; set; }
+        //public bool NeedGroupsIds { get; set; }
+        public List<int> GroupsIds { get; set; }
     }
 }

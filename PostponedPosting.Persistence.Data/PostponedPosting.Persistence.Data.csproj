@@ -62,14 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201702221150586_sd.cs" />
-    <Compile Include="Migrations\201702221150586_sd.Designer.cs">
-      <DependentUpon>201702221150586_sd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201702221156189_sd1.cs" />
-    <Compile Include="Migrations\201702221156189_sd1.Designer.cs">
-      <DependentUpon>201702221156189_sd1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,14 +79,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201702221150586_sd.resx">
-      <DependentUpon>201702221150586_sd.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201702221156189_sd1.resx">
-      <DependentUpon>201702221156189_sd1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -53,12 +53,11 @@ namespace PostponedPosting.WebUI.Controllers.APIs
             try
             {
                 int modelId = await PostingService.EditPostAsync(model, User.Identity.GetUserId());
-
                 return Ok(modelId);
             }
             catch(Exception ex)
             {
-                return InternalServerError(ex);
+                return BadRequest(ex.Message);
             }
         }
 

@@ -18,10 +18,10 @@ namespace PostponedPosting.Persistence.Data
         {
         }
 
-        public DbSet<SocialNetwork> SocialNetworks { get; set; }
-        public DbSet<AccessToken> AccessTokens { get; set; }
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<GroupOfLinks> PagesGroups { get; set; }
+        public DbSet<SocialNetwork> SocialNetwork { get; set; }
+        public DbSet<AccessToken> AccessToken { get; set; }
+        public DbSet<Post> Post { get; set; }
+        public DbSet<GroupOfLinks> GroupOfLinks { get; set; }
         public DbSet<UserCredentials> UserCredentials { get; set; }
         public DbSet<UserSocialNetwork> UserSocialNetwork { get; set; }
 

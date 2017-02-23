@@ -15,11 +15,7 @@ namespace PostponedPosting.WebUI.Controllers
         private ApplicationUserManager _userManager = null;
 
         public ActionResult Index()
-        {
-            if(User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "ManagePosting");
-            }
+        {            
             return View();
         }
               

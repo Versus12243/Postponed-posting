@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using PostponedPosting.Persistence.ServiceModel.ViewModels;
 
 namespace PostponedPosting.Persistence.ApplicationService.Services
 {
@@ -37,7 +36,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                     {
                         post.Name = model.Name;
                         post.Content = model.Content;
-                        post.DateOfPublish = model.DateOfPublish;
+                        post.DateOfPublish = (model.SendAfterSaving ? DateTime.UtcNow.AddMinutes(1) : model.DateOfPublish);
                         post.SendingStatus = Domain.Entities.StatusEnums.PostStatus.Pending;
 
                         foreach (var groupId in model.GroupsIds)
@@ -62,13 +61,13 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                         Name = model.Name,
                         Content = model.Content,
                         DateOfCreation = DateTime.Now,
-                        DateOfPublish = model.DateOfPublish,
+                        DateOfPublish = (model.SendAfterSaving ? DateTime.Now.AddMinutes(1) : model.DateOfPublish),
                         SendingStatus = Domain.Entities.StatusEnums.PostStatus.Pending,
                         Status = Domain.Entities.StatusEnums.EntityStatus.Active,
-                        SocialNetwork = SocialNetworkRepository.GetById(1),
+                        SocialNetworkId = model.SocialNetworkId,
                         User = user
                     };
-
+                    
                     foreach (var groupId in model.GroupsIds)
                     {
                         var group = user.GroupsOfLinks.FirstOrDefault(w => w.Id == groupId);
@@ -167,13 +166,57 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
 
                     if (post != null)
                     {
+                        var groupsIds = post.GroupsOfLinks.Select(g => g.Id).ToList();
+
+                        foreach(var id in groupsIds)
+                        {
+                            if(!param.GroupsIds.Contains(id))
+                            {
+                                var group = post.GroupsOfLinks.FirstOrDefault(w => w.Id == id);
+
+                                if(group != null)
+                                {
+                                    post.GroupsOfLinks.Remove(group);
+                                }
+                            }
+                        }
+
+                        groupsIds = post.GroupsOfLinks.Select(g => g.Id).ToList();
+
+                        foreach (var id in param.GroupsIds)
+                        {
+                            if (!groupsIds.Contains(id))
+                            {
+                                var group = post.User.GroupsOfLinks.FirstOrDefault(w => w.SocialNetwork.Id == post.SocialNetworkId && w.Status == EntityStatus.Active && w.Id == id);
+                                if (group != null)
+                                {
+                                    post.GroupsOfLinks.Add(group);
+                                }
+                                else
+                                    throw new Exception("Group is not found");
+                            }
+                        }
+
+                        PostRepository.Update(post);
+
+                        groupsIds = post.GroupsOfLinks.Select(g => g.Id).ToList();
+
                         groups = post.User.GroupsOfLinks.Where(w => w.SocialNetwork.Id == post.SocialNetworkId && w.Status == EntityStatus.Active)
                             .Select(g => new PostSelectedGroupViewModel
                             {
                                 Id = g.Id,
                                 Name = g.Name,
-                                Selection = g.Posts.Select(p => p.Id).Contains(g.Id)
+                                Selection = groupsIds.Contains(g.Id)
                             }).AsQueryable();
+
+                        //if (param.NeedGroupsIds)
+                        //{
+                        //    param.GroupsIds = post.User.GroupsOfLinks.Where(w => w.SocialNetwork.Id == post.SocialNetworkId && w.Status == EntityStatus.Active).Select(g => g.Id).ToList();
+                        //}
+                        //else
+                        //{
+                        //    param.GroupsIds = new List<int>();
+                        //}
                     }
                     else throw new Exception("Post is not found");
                 }
@@ -210,6 +253,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
 
                 List<PostSelectedGroupViewModel> data = new ResultSet<PostSelectedGroupViewModel>().GetResult(param.Search.Value, param.SortOrder, param.Start, param.Length, groups, predicate);
                 int count = new ResultSet<PostSelectedGroupViewModel>().Count(param.Search.Value, groups, predicate);
+                
                 DTResult<PostSelectedGroupViewModel> result = new DTResult<PostSelectedGroupViewModel>
                 {
                     draw = param.Draw,
@@ -249,7 +293,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                         DateOfPublish = post.DateOfPublish,
                         Status = post.Status.ToString(),
                         StatusOfSending = post.SendingStatus.ToString(),
-                        GroupsIds = post.GroupsOfLinks.Select(g => g.Id).ToList()
+                        GroupsIds = post.GroupsOfLinks.Where(t => t.Status == EntityStatus.Active).Select(g => g.Id).ToList()
                     };
                 }
 

@@ -16,9 +16,13 @@ class ManagePosting {
             toastr.info('Saved');
             $('#modalCreatePost').modal('hide');
             ManagePosting.PostsDT.ajax.reload();
+            $('#PostId').val('0');
+            ManagePosting.GroupsIds = [];
         }).fail(function (response) {
             toastr.error(JSON.parse(response.responseText).Message);
-            });
+            $('#PostId').val('0');
+            ManagePosting.GroupsIds = [];
+        });
     }
 
     validatePostData() {
@@ -32,7 +36,9 @@ class ManagePosting {
             DateOfPublish: $(form).find('#DateOfPublish').val(),
             StatusOfSending: null,
             Status: null,
-            GroupsIds: ManagePosting.GroupsIds
+            GroupsIds: ManagePosting.GroupsIds,
+            SendAfterSaving: $('input[name="date-of-sending-rbtn"]:checked').data('value'),
+            SocialNetworkId: $('#SocialNetworkId').val()
              //$('#groups-of-links-table-dt tr:has(input:checked) span').map(function (index, item) { return $(item).data('id') })            
         };
 
@@ -51,12 +57,14 @@ class ManagePosting {
             return;
         }
 
-        var dateOfPublish = new Date(data.DateOfPublish);
-        var currentDate = new Date();
+        if (!data.SendAfterSaving) {
+            var dateOfPublish = new Date(data.DateOfPublish);
+            var currentDate = new Date();
 
-        if (Common.IsNullOrEmpty(data.DateOfPublish) || dateOfPublish <= currentDate) {
-            toastr.error('Date of publish can`t be less then current date');
-            return;
+            if (Common.IsNullOrEmpty(data.DateOfPublish) || dateOfPublish <= currentDate) {
+                toastr.error('Date of publish can`t be less then current date');
+                return;
+            }
         }
 
         this.createNewPost(data);
@@ -90,6 +98,27 @@ class ManagePosting {
     }
 
     initPostsTable() {
+
+        $('div.form-group:has(input[name="date-of-sending-rbtn"])').click(function (evt) {
+            var target = $(evt.target);
+
+            if ($(target).is('div')) {
+                target = $(target).find('input');
+            }
+            else if ($(target).is('label')) {
+                target = $(target).parent().find('input');
+            }
+
+            $(target).prop('checked', true);
+
+            if ($(target).data('value')) {
+                $('div.input-group.date').addClass('hidden');
+            }
+            else {
+                $('div.input-group.date').removeClass('hidden');
+            }
+        })
+
         ManagePosting.PostsDT = $('#posts-dt').DataTable({
             "serverSide": true,
             "ajax": {
@@ -110,7 +139,7 @@ class ManagePosting {
                 { "data": "Status", "className": 'text-center' },
                 { "data": "Actions" }
             ],
-            "order": [0, "asc"],
+            "order": [1, "asc"],
 
             "drawCallback": function (settings) {
                 $('.editPost').off().on('click', function (evt) {
@@ -124,7 +153,7 @@ class ManagePosting {
                         $(form).find('#Name').val(response.Name);
                         $(form).find('#Content').val(response.Content);
                         $(form).find('#DateOfPublish').val(LocalDateCreator.getLocalDate(response.DateOfPublish));
-
+                        $(form).find('input[name="date-of-sending-rbtn"][data-value="false"]').click();
                         ManagePosting.GroupsIds = [];
 
                         for (var i = 0; i < response.GroupsIds.length; i++)
@@ -169,14 +198,16 @@ class ManagePosting {
         $('#modalCreatePost').on('hidden.bs.modal', function () {
             (<HTMLFormElement>document.getElementById('createPostForm')).reset();
             ManagePosting.GroupsIds = [];
+            $($('[data-toggle="tab"]')[0]).click();
+            $('#PostId').val('0');
+            $('input[name="date-of-sending-rbtn"][data-value="true"]').click();
         });        
     }
         
     initSelectedGroupsTable() {
         if (ManagePosting.GroupsOfLinksDT != null) {
-            ManagePosting.GroupsOfLinksDT.ajax.reload();
+            ManagePosting.GroupsOfLinksDT.destroy()
         }
-        else {
             ManagePosting.GroupsOfLinksDT = $('#groups-of-links-table-dt').DataTable({
                 "scrollY": "225px",
                 "serverSide": true,
@@ -185,8 +216,11 @@ class ManagePosting {
                     "url": '/api/Posting/SelectetGroupsDataHandler',
                     "contentType": 'application/json; charset=utf-8',
                     'data': function (data) {
+                        var postId = $('#PostId').val();
                         data['SocialNetworkId'] = $('#SocialNetworkId').val();
-                        data['PostId'] = $('#PostId').val();
+                        data['PostId'] = postId;
+                        //data['NeedGroupsIds'] = ManagePosting.GroupsIds.length == 0 && postId != 0;
+                        data['GroupsIds'] = ManagePosting.GroupsIds;
                         return data = JSON.stringify(data);
                     }
                 },
@@ -194,9 +228,9 @@ class ManagePosting {
                     { "data": "Id", "visible": false, "searchable": false },
                     { "data": "Expand_Collapse", "searchable": false, "orderable": false, "className": 'details-control' },
                     { "data": "Name" },
-                    { "data": "Selection", "className": 'text-center' }
+                    { "data": "Selection", "className": 'text-center', "searchable": false, "orderable": parseInt($('#PostId').val()) > 0 }
                 ],
-                "order": [0, "asc"],
+                "order": [2, "asc"],
                 "drawCallback": function (settings) {
                     $('td.details-control').off().on('click', function (evt) {
                         var tr = $(this).closest('tr');
@@ -253,25 +287,33 @@ class ManagePosting {
                                 ManagePosting.GroupsIds.splice(index, 1);
                             }
                         }
+                        ManagePosting.GroupsOfLinksDT.ajax.reload();
                     });
                 }
             });
 
             ManagePosting.GroupsOfLinksDT.on('xhr.dt', function (e, settings, json) {
+                //var postId = JSON.parse(settings.oAjaxData)['PostId'];
+                //if (ManagePosting.GroupsIds.length == 0 && !Common.IsNullOrEmpty(postId) && postId != 0)
+                //{
+                //    ManagePosting.GroupsIds = settings['GroupsIds'];
+                //}
+                if (Common.IsNullOrUndef(ManagePosting.GroupsIds)) {
+                    ManagePosting.GroupsIds = [];
+                }
                 if (!Common.IsNullOrUndef(json) && !Common.IsNullOrUndef(json.data) && json.data.length > 0) {
                     for (var i = 0; i < json.data.length; i++) {
                         json.data[i]['Expand_Collapse'] = '<span data-id="' + json.data[i]["Id"] + '"></span>';
-                        json.data[i]['Selection'] = (json.data[i]['Selection'] || ManagePosting.GroupsIds.indexOf(json.data[i]['Id']) > -1) ? '<input class="cbx_group" type="checkbox" data-id="' + json.data[i]["Id"] + '" checked />' : '<input class="cbx_group" type="checkbox" data-id="' + json.data[i]["Id"] + '"/>';
+                        json.data[i]['Selection'] = (ManagePosting.GroupsIds.indexOf(json.data[i]['Id']) > -1) ? '<input class="cbx_group" type="checkbox" data-id="' + json.data[i]["Id"] + '" checked />' : '<input class="cbx_group" type="checkbox" data-id="' + json.data[i]["Id"] + '"/>';                      
                     }
                 }
-            });            
-        }
+            });                  
     }
 }
 
 window.onload = () => {
     var managePosting: ManagePosting = new ManagePosting();
-    $(".date").datetimepicker();
+    $(".date, #DateOfPublish").datetimepicker();
     $('#create-post-continue-btn, #createPostForm .nav li').click((evt) => { managePosting.postCreating(evt); });
     managePosting.initPostsTable();
 
