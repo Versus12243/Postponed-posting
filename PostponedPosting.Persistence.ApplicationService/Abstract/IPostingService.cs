@@ -11,5 +11,6 @@ namespace PostponedPosting.Persistence.ApplicationService.Abstract
        Task<int> EditPostAsync(PostViewModel model, string userId);
        PostViewModel GetPostData(string userId, int postId);
        int SwitchSendingStatus(string userId, int postId);
+       int DeletePost(string userId, int id);
     }
 }

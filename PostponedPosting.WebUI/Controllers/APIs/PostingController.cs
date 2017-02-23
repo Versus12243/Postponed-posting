@@ -91,5 +91,19 @@ namespace PostponedPosting.WebUI.Controllers.APIs
             }
         }
 
+        [HttpDelete]
+        public IHttpActionResult DeletePost(int id)
+        {
+            try
+            {
+                var result = PostingService.DeletePost(User.Identity.GetUserId(), id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

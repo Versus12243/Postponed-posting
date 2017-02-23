@@ -166,6 +166,19 @@ class ManagePosting {
                     });
                 });
 
+                $('.deletePost').off().on('click', function (evt) {
+                    var target = evt.target;
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/api/Posting/DeletePost/' + $(target).data('id')
+                    }).done(function (response) {
+                        toastr.info("Post was removed");
+                        ManagePosting.PostsDT.ajax.reload();
+                    }).fail(function (response) {
+                        toastr.error(JSON.parse(response.responseText).Message);
+                    });
+                });
+
                 $('.switchSendingStatus').off().on('click', function (evt) {
                     var target = evt.target;
                     $.ajax({
@@ -190,7 +203,7 @@ class ManagePosting {
                     json.data[i]['Actions'] = '<input type="button" class="btn btn-default editPost" data-id="' + json.data[i]["Id"] + '" value="Edit"/>' +
                         (statusOfSending != "Ready" ? '<input type="button" data-id="' + json.data[i]["Id"] + '" class="btn btn-default switchSendingStatus" value="' + (statusOfSending != "Suspended" ? "Suspend" : "Run") + '">' : '') + 
                         '<input type="button" data-id="' + json.data[i]["Id"] + '" class="btn btn-default sendNow" value="Send now" />' +
-                        '<input type="button" data-id="' + json.data[i]["Id"] + '" class="btn btn-default delete" value="Delete">';
+                        (json.data[i]['Status'] == "Active" ? '<input type="button" data-id="' + json.data[i]["Id"] + '" class="btn btn-default deletePost" value="Delete">' : '');
                 }
             }
         });  
@@ -293,11 +306,6 @@ class ManagePosting {
             });
 
             ManagePosting.GroupsOfLinksDT.on('xhr.dt', function (e, settings, json) {
-                //var postId = JSON.parse(settings.oAjaxData)['PostId'];
-                //if (ManagePosting.GroupsIds.length == 0 && !Common.IsNullOrEmpty(postId) && postId != 0)
-                //{
-                //    ManagePosting.GroupsIds = settings['GroupsIds'];
-                //}
                 if (Common.IsNullOrUndef(ManagePosting.GroupsIds)) {
                     ManagePosting.GroupsIds = [];
                 }

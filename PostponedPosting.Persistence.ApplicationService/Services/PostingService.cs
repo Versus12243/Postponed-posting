@@ -31,13 +31,14 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
             {
                 if (model.Id > 0)
                 {
-                    var post = PostRepository.Find(p => p.Id == model.Id && p.Status == EntityStatus.Active);
+                    var post = PostRepository.Find(p => p.Id == model.Id);
                     if (post != null)
                     {
                         post.Name = model.Name;
                         post.Content = model.Content;
                         post.DateOfPublish = (model.SendAfterSaving ? DateTime.UtcNow.AddMinutes(1) : model.DateOfPublish);
                         post.SendingStatus = Domain.Entities.StatusEnums.PostStatus.Pending;
+                        post.Status = EntityStatus.Active;
 
                         foreach (var groupId in model.GroupsIds)
                         {
@@ -162,7 +163,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
 
                 if (param.PostId > 0)
                 {
-                    var post = PostRepository.Find(p => p.Id == param.PostId && p.SocialNetworkId == param.SocialNetworkId && p.UserId == userId && p.Status == EntityStatus.Active);
+                    var post = PostRepository.Find(p => p.Id == param.PostId && p.SocialNetworkId == param.SocialNetworkId && p.UserId == userId);
 
                     if (post != null)
                     {
@@ -319,6 +320,8 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                     }
                     else if(post.SendingStatus != PostStatus.Ready && post.SendingStatus != PostStatus.Sending)
                     {
+                        if (DateTime.Compare(post.DateOfPublish, DateTime.Now) <= 0)
+                            throw new Exception("Time of publish must be greater than current time");
                         post.SendingStatus = PostStatus.Pending;
                     }
 
@@ -329,6 +332,26 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                 throw new Exception("Post is not found");
             }
 
+            throw new Exception("Not enogh permission");
+        }
+
+        public int DeletePost(string userId, int id)
+        {
+            var user = UserRepository.Find(u => u.Id == userId && u.Status == EntityStatus.Active);
+
+            if(user != null)
+            {
+                var post = PostRepository.Find(p => p.Id == id && p.Status == EntityStatus.Active);
+
+                if(post != null)
+                {
+                    post.Status = EntityStatus.Deleted;
+                    post.SendingStatus = PostStatus.Suspended;
+                    PostRepository.Update(post);
+                    return post.Id;
+                }
+                throw new Exception("Post is not found");
+            }
             throw new Exception("Not enogh permission");
         }
     }
