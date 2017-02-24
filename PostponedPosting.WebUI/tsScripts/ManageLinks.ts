@@ -46,7 +46,7 @@ class ManageLinks {
       dt.on('xhr.dt', function (e, settings, json) {
           if (!Common.IsNullOrUndef(json) && !Common.IsNullOrUndef(json.data) && json.data.length > 0) {
               for (var i = 0; i < json.data.length; i++) {
-                  json.data[i]['DateOfCreate'] = LocalDateCreator.getLocalDate(json.data[i]['DateOfCreate']);
+                  json.data[i]['DateOfCreation'] = LocalDateCreator.getLocalDate(json.data[i]['DateOfCreation']);
                   var id = json.data[i]['Id'];
                   json.data[i]['Actions'] = '<input type="button" class="btn btn-default edit-link" data-id="' + id + '" id="editLink" value="Edit link" />' +
                       '<input type="button" class="btn btn-default switch-presence" data-id="' + id + '" id="switch-presence" value="' + (parseInt(json.data[i]['GroupId']) == $('#GroupId').val() ? "Exclude from group" : "Include to group") + '"/>';

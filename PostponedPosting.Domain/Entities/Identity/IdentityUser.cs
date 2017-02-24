@@ -15,6 +15,8 @@ namespace PostponedPosting.Domain.Entities.Identity
 
         public virtual ICollection<GroupOfLinks> GroupsOfLinks { get; set; }
 
+        public virtual ICollection<UserSocialNetwork> UserSocialNetworks { get; set; }
+
         public virtual ICollection<Post> Posts { get; set; }
 
         public virtual EntityStatus Status { get; set; }
@@ -24,6 +26,7 @@ namespace PostponedPosting.Domain.Entities.Identity
             Access_tokens = Access_tokens.Empty();
             GroupsOfLinks = GroupsOfLinks.Empty();
             Posts = Posts.Empty();
+            UserSocialNetworks = UserSocialNetworks.Empty();
         }
     }
 }

@@ -65,6 +65,9 @@ class ManagePosting {
                 toastr.error('Date of publish can`t be less then current date');
                 return;
             }
+
+            data.DateOfPublish = dateOfPublish.toISOString();
+
         }
 
         this.createNewPost(data);
@@ -75,11 +78,7 @@ class ManagePosting {
         if ($(target).is('input')) {
             if ($('#post-main-options').hasClass('active')) {
                 $($('[data-toggle="tab"]')[1]).click();
-                $('#create-post-continue-btn').attr('value', 'Save');
-                //$('#create-post-continue-btn').addClass('disabled');
-                setTimeout(() => {
-                    this.initSelectedGroupsTable();
-                }, 200);
+                return;
             }
             else
                 this.validatePostData();

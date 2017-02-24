@@ -201,7 +201,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                             Name = model.Name,
                             Url = model.Url,
                             Status = Domain.Entities.StatusEnums.EntityStatus.Active,
-                            DateOfCreation = DateTime.Now,
+                            DateOfCreation = DateTime.UtcNow,
                             SocialNetwork = group.SocialNetwork
                         };
                         lnk.Groups = new List<GroupOfLinks>() { group };
@@ -218,7 +218,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
 
             if(user != null)
             {
-                var link = LinkRepository.Find(l => l.Id == linkId);
+                var link = LinkRepository.GetById(linkId);
                 if (link != null)
                 {
                     var group = GroupOfLinksRepository.Find(g => g.Id == groupId);

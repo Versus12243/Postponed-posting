@@ -19,6 +19,7 @@ namespace PostponedPosting.SeleniumApp
             Bind<IDataContext>().To<DataContext>();
             Bind(typeof(IRepository<>)).To(typeof(Repository<>));
             Bind<IPostingService>().To<PostingService>();
+            Bind<ICryptoService>().To<CryptoService>();
         }
     }
 }

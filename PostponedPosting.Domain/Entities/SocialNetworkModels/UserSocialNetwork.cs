@@ -20,7 +20,5 @@ namespace PostponedPosting.Domain.Entities.SocialNetworkModels
         public virtual EntityStatus Status { get; set; } 
 
         public virtual UserCredentials Credentials { get; set; }
-
-        public virtual ICollection<GroupOfLinks> PagesGroups { get; set; }
     }
 }

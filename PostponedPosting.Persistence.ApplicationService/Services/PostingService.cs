@@ -31,12 +31,12 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
             {
                 if (model.Id > 0)
                 {
-                    var post = PostRepository.Find(p => p.Id == model.Id);
+                    var post = PostRepository.Find(p => p.Id == model.Id && p.Status != EntityStatus.Disabled);
                     if (post != null)
                     {
                         post.Name = model.Name;
                         post.Content = model.Content;
-                        post.DateOfPublish = (model.SendAfterSaving ? DateTime.UtcNow.AddMinutes(1) : model.DateOfPublish);
+                        post.DateOfPublish = (model.SendAfterSaving ? DateTime.UtcNow.AddMinutes(1) : model.DateOfPublish.ToUniversalTime());
                         post.SendingStatus = Domain.Entities.StatusEnums.PostStatus.Pending;
                         post.Status = EntityStatus.Active;
 
@@ -61,8 +61,8 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                     {
                         Name = model.Name,
                         Content = model.Content,
-                        DateOfCreation = DateTime.Now,
-                        DateOfPublish = (model.SendAfterSaving ? DateTime.Now.AddMinutes(1) : model.DateOfPublish),
+                        DateOfCreation = DateTime.UtcNow,
+                        DateOfPublish = (model.SendAfterSaving ? DateTime.UtcNow.AddMinutes(1) : model.DateOfPublish),
                         SendingStatus = Domain.Entities.StatusEnums.PostStatus.Pending,
                         Status = Domain.Entities.StatusEnums.EntityStatus.Active,
                         SocialNetworkId = model.SocialNetworkId,
@@ -71,7 +71,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                     
                     foreach (var groupId in model.GroupsIds)
                     {
-                        var group = user.GroupsOfLinks.FirstOrDefault(w => w.Id == groupId);
+                        var group = user.GroupsOfLinks.FirstOrDefault(w => w.Id == groupId && w.Status == EntityStatus.Active);
                         if (group != null && !post.GroupsOfLinks.Contains(group))
                         {
                             post.GroupsOfLinks.Add(group);
@@ -90,7 +90,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
         {
             try
             {
-                var dtsource = PostRepository.FindAll(w => w.UserId == userId && w.SocialNetworkId == param.SocialNetworkId)
+                var dtsource = PostRepository.FindAll(w => w.UserId == userId && w.SocialNetworkId == param.SocialNetworkId && w.Status != EntityStatus.Disabled)
                                              .Select(t => new PostViewModel
                                              {
                                                  Id = t.Id,
@@ -163,7 +163,7 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
 
                 if (param.PostId > 0)
                 {
-                    var post = PostRepository.Find(p => p.Id == param.PostId && p.SocialNetworkId == param.SocialNetworkId && p.UserId == userId);
+                    var post = PostRepository.Find(p => p.Id == param.PostId && p.SocialNetworkId == param.SocialNetworkId && p.UserId == userId && p.Status != EntityStatus.Disabled);
 
                     if (post != null)
                     {
@@ -209,15 +209,6 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                                 Name = g.Name,
                                 Selection = groupsIds.Contains(g.Id)
                             }).AsQueryable();
-
-                        //if (param.NeedGroupsIds)
-                        //{
-                        //    param.GroupsIds = post.User.GroupsOfLinks.Where(w => w.SocialNetwork.Id == post.SocialNetworkId && w.Status == EntityStatus.Active).Select(g => g.Id).ToList();
-                        //}
-                        //else
-                        //{
-                        //    param.GroupsIds = new List<int>();
-                        //}
                     }
                     else throw new Exception("Post is not found");
                 }
