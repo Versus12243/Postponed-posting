@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using PostponedPosting.Domain.Entities.PostModels;
 using System;
@@ -15,14 +16,13 @@ namespace PostponedPosting.SeleniumApp
         public readonly string Id = null;
         object locker = new object();
         Stack<Post> Posts = null;
-        bool postSended = false;
         RemoveDriver removeDriverDelegate = null;
 
         private IWebDriver driver;
 
         public void SetupDriver()
         {
-            driver = new FirefoxDriver();
+            driver = new ChromeDriver();
         }
 
         public UserPostsSender(string id, string login, string password, RemoveDriver removeDriver)
@@ -83,7 +83,8 @@ namespace PostponedPosting.SeleniumApp
             }
             else
             {
-                driver.Dispose();                
+                driver.Dispose();
+                removeDriverDelegate(this.Id);
             }        
         }        
     }

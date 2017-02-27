@@ -6,6 +6,27 @@ class ManagePosting {
     static PostsDT = null;
     static GroupsOfLinksDT = null;
     static GroupsIds = [];
+    static ReplaceLinksInterval = null;
+    static TimeToReplaceLinks = 5;
+    static TimeToReplaseStartTimer = 0;
+
+    getAccessToken() {
+        //POST / oauth / access_token HTTP/ 1.1
+        //Host: api - ssl.bitly.com
+        //Content - Type: application / x - www - form - urlencoded
+
+        //client_id = YOUR_CLIENT_ID & client_secret=YOUR_CLIENT_SECRET & code=CODE & redirect_uri=REDIRECT_URI
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: "https://api-ssl.bitly.com/oauth/access_tokenHTTP/1.1"
+        //    data: {
+        //        client_id: "",
+        //        client_secret: ""
+        //    }
+        //})
+
+    }
 
     createNewPost(data): void {
         $.ajax({
@@ -136,7 +157,7 @@ class ManagePosting {
                 { "data": "DateOfPublish", "className": 'text-center' },
                 { "data": "StatusOfSending", "className": 'text-center' },
                 { "data": "Status", "className": 'text-center' },
-                { "data": "Actions" }
+                { "data": "Actions", "searchable": false, "orderable": false, "className": 'text-center'  }
             ],
             "order": [1, "asc"],
 
@@ -213,6 +234,12 @@ class ManagePosting {
             $($('[data-toggle="tab"]')[0]).click();
             $('#PostId').val('0');
             $('input[name="date-of-sending-rbtn"][data-value="true"]').click();
+            if (ManagePosting.ReplaceLinksInterval != null) {
+                window.clearInterval(ManagePosting.ReplaceLinksInterval);
+                ManagePosting.ReplaceLinksInterval = null;
+            }
+            ManagePosting.TimeToReplaceLinks = 5;
+            ManagePosting.TimeToReplaseStartTimer = 0;
         });        
     }
         
@@ -316,6 +343,112 @@ class ManagePosting {
                 }
             });                  
     }
+
+    startInitTimerToReplaceLinks() {
+    if (ManagePosting.ReplaceLinksInterval != null) {
+        window.clearInterval(ManagePosting.ReplaceLinksInterval);
+        ManagePosting.ReplaceLinksInterval = null;
+    }
+        ManagePosting.TimeToReplaseStartTimer = 0;
+        ManagePosting.ReplaceLinksInterval = window.setInterval(function () {
+            ManagePosting.TimeToReplaseStartTimer += 1;
+            if (ManagePosting.TimeToReplaseStartTimer == ManagePosting.TimeToReplaceLinks) {
+                ManagePosting.replaceLinks();
+            }
+        }, 100); 
+    }
+
+    static replaceLinks() {
+      //  API Address: https://api-ssl.bitly.com
+      //  GET / v3 / shorten ? access_token = ACCESS_TOKEN & longUrl=http % 3A% 2F% 2Fgoogle.com % 2F
+        var content = $('#Content').val();
+        var splitByRow = content.split('\n');
+        var words = [];
+
+        for (var i = 0; i < splitByRow.length; i++) {
+           words = words.concat(splitByRow[i].split(' '));
+        }
+
+        words = Array.from(new Set(words));
+
+        var tempLinks = [];
+
+        for (var i = 0; i < words.length; i++) {
+            var re = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/i;
+            if (re.test(words[i]) && words[i].indexOf("bit.ly") < 0) {
+                ManagePosting.replaceLink(words[i]);
+            }
+        }
+    }
+
+    static replaceLink(link) {
+        $.ajax({
+            type: "GET",
+            url: "https://api-ssl.bitly.com/v3/shorten",
+            data: {
+                access_token: "dd1b0720edb44e71d43a9923c9ebbc397baff27a",
+                longUrl: link
+            }
+        }).done(function (response) {
+            var text = $('#Content').val();
+            var newUrl = response.data.url;
+            if (parseInt(response.status_code) == 200) 
+                $('#Content').val(text.replace(link, newUrl));            
+            }).fail(function (response) {
+                console.log(response);
+            });
+    }
+
+    static valid = [];
+    static countds = 0;
+
+    static requestDebugInfoAoutPost(id) {
+        
+        //add method for receiving access token
+        $.ajax({
+            type: "POST",
+            url: "https://graph.facebook.com/v2.8/?access_token=EAACEdEose0cBANjz2HZB8KhuIH5k12Crb869MFJRZB4SJ4pzm6AyZBEWRIyi2PcUzbQkmYZCuYiPqyNF66Eij0kAcV55Lr5hcKik7EFyGkEYoKgbcD3Linx3GRsfZCeZCPrWQ4fLrvJ3BNqz4cWkVszMUTZAFnGQSLJ6bFgq7hc5eRwyGLmFele50Pak1ooF6MZD",
+            data: {
+                debug: "warning",
+                format: "json",
+                id: id,
+                method: "post",
+                pretty: 0,
+                scrape: true,
+                suppress_http_code: 1
+            }
+        }).done(function (response) {    
+
+            for (var i = 0; i < response.image.length; i++){
+                var image = new Image();                
+
+                ManagePosting.evL(image, i, response.image.length);
+
+                image.src = response.image[i].url;
+            }
+        });
+    }
+
+    static biggestImage = null;
+    static biggestSize = 0;
+
+    static evL(image, id, l) {
+        image.addEventListener("load", function (e) {
+            if (image.width >= 200 && image.height >= 200) {
+                ManagePosting.valid.push(id);
+                var size = image.height * image.width;
+                if (size > ManagePosting.biggestSize) {
+                    ManagePosting.biggestSize = size;
+                    ManagePosting.biggestImage = image;
+                }
+            }
+            ManagePosting.countds++;
+            if (ManagePosting.countds == l) {
+                debugger;
+            }
+        });
+    }
+
 }
 
 window.onload = () => {
@@ -323,5 +456,5 @@ window.onload = () => {
     $(".date, #DateOfPublish").datetimepicker();
     $('#create-post-continue-btn, #createPostForm .nav li').click((evt) => { managePosting.postCreating(evt); });
     managePosting.initPostsTable();
-
+    $('textarea#Content').keyup(() => { managePosting.startInitTimerToReplaceLinks() });
 };

@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using PostponedPosting.Domain.Entities.PostModels;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,6 @@ namespace PostponedPosting.SeleniumApp
                         Thread.Sleep(2000);
                         var element = Driver.FindElement(By.XPath("//textarea[contains(@placeholder, 'О чем вы думаете')]"));
                         element.SendKeys(message);
-                        ((IJavaScriptExecutor)Driver).ExecuteScript("document.getElementsByTagName('form')[1].getElementsByTagName('textarea')[0].click()");
                         Thread.Sleep(5000);
                         ((IJavaScriptExecutor)Driver).ExecuteScript("document.getElementById('pagelet_composer').querySelector('[type = submit]').click()");
                     }
@@ -47,12 +47,10 @@ namespace PostponedPosting.SeleniumApp
                     {                        
                         Thread.Sleep(2000);
                         var element = Driver.FindElement(By.XPath("//textarea[contains(@placeholder, 'Напишите')]"));
-                        element.SendKeys(message);
-                        element = Driver.FindElement(By.XPath("//div[@id='pagelet_group_composer']//form"));
-                        element.Click();
-                       // ((IJavaScriptExecutor)Driver).ExecuteScript("document.getElementsByTagName('textarea')[0].click()");
+                        element.SendKeys(message);            
                         Thread.Sleep(5000);
-                        ((IJavaScriptExecutor)Driver).ExecuteScript("document.getElementById('contentArea').getElementsByTagName('button')[0].click()");
+                        element = Driver.FindElement(By.XPath("//button//em[@data-intl-translation='Опубликовать']/ancestor::button"));
+                        element.Click();
                     }
                     catch (Exception ex)
                     {
