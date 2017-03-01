@@ -1,0 +1,40 @@
+You can use nuget.exe to restore your packages or with NuGet 2.7, or above, installed you can simply compile your solution in Visual Studio, which will also restore the missing packages.
+
+For NuGet.exe you can run the following command for each project.
+
+nuget install packages.config
+Or with NuGet 2.7 you can restore all packages in the solution using the command line.
+
+nuget restore YourSolution.sln
+Both of these will pull down the packages. Your project files will not be modified however when running this command so the project should already have a reference to the NuGet packages. If this is not the case then you can use Visual Studio to install the packages.
+
+With NuGet 2.7, and above, Visual Studio will automatically restore missing NuGet packages when you build your solution so there is no need to use NuGet.exe.
+
+To update all the packages in your solution, first restore them, and then you can either use NuGet.exe to update the packages or from within Visual Studio you can update the packages from the Package Manager Console window, or finally you can use the Manage Packages dialog.
+
+From the command line you can update packages in the solution to the latest version available from nuget.org.
+
+nuget update YourSolution.sln
+Note that this will not run any PowerShell scripts in any NuGet packages.
+
+From within Visual Studio you can use the Package Manager Console to also update the packages. This has the benefit that any PowerShell scripts will be run as part of the update where as using NuGet.exe will not run them. The following command will update all packages in every project to the latest version available from nuget.org.
+
+Update-Package
+You can also restrict this down to one project.
+
+Update-Package -Project YourProjectName
+If you want to reinstall the packages to the same versions as were previously installed then you can use the -reinstall argument with Update-Package command.
+
+Update-Package -reinstall
+You can also restrict this down to one project.
+
+Update-Package -reinstall -Project YourProjectName
+The -reinstall option will first uninstall and then install the package back again into a project.
+
+Or, you can update the packages using the Manage Packages dialog.
+
+Updates:
+
+2013/07/10 - Updated with information about nuget restore in NuGet 2.7
+2014/07/06 - Updated with information about automatic package restore in Visual Studio and brought the answer up to date with other changes to NuGet.
+2014/11/21 - Updated with information about -reinstall
