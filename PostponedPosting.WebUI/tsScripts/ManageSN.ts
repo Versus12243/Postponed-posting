@@ -9,11 +9,19 @@ class ManageSN {
             type: 'POST',
             url: '/api/Credentials/GetUserCredentials/' + id
         }).done(function (response) {
-            $('#login').val(response.Login);
-            $('#password').val(response.Password);
-            $('#SNId').val(response.SocialNetworkId);
+            if (response != null) {
+                $('#login').val(response.Login);
+                $('#password').val(response.Password);
+            }
+            else {
+                $('#login').val("");
+                $('#password').val("");
+            }
+            $('#SNId').val(id);
             $('#modalEditCredentials').modal('show');
-        })
+        }).fail(function (response) {
+            toastr.error(JSON.parse(response.responseText).Message);
+        });        
     }
 
     saveCredentials() {
@@ -26,7 +34,9 @@ class ManageSN {
                 Password: $('#password').val()
             }
         }).done(function (response) {
-            toastr.info(response);
+            if (parseInt(response) > 0)
+                toastr.info("Credentials was saved");
+            $('#modalEditCredentials').modal('hide');
         })
     }
 

@@ -53,7 +53,7 @@ window.onload = () => {
     });
 
     $('.edit-links-from-group-of-links').click((evt) => { location.href = "/Links/Index/" + $(evt.target).data('id'); })
-
+    $('#edit-group-form').submit((evt) => { evt.preventDefault(); manageGroupsOfLinks.editGroup(); })
     $('#edit-group-btn').click(() => { manageGroupsOfLinks.editGroup(); });
 
 

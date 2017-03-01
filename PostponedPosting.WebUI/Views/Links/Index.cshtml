@@ -13,8 +13,8 @@
         <input type="button" class="btn btn-default m-b-10" id="add-link" value="Add link" />
     </div>
     <div class="col-md-6">
-        <input type="checkbox" id="showAllLinks" value="Show links from all groups" />
-        <span>Show links from all groups</span>
+        <input type="checkbox" style="cursor: pointer" id="showAllLinks" value="Show links from all groups" />
+        <span class="bold" style="cursor: pointer">Show links from all groups</span>
     </div>
 </div>
 <table class="table table-bordered table-hover" id="list-of-links-datatable">
@@ -32,28 +32,30 @@
 </table>
 
 <div id="modal-edit-link" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title"></h4>
             </div>
-            <form id="add-link-form">
+            <form id="edit-link-form">
                 <div class="modal-body">
-                    @Html.Hidden("Id", "0")
-                    <div class="form-group">
-                        <label>Name:</label>
-                        <input type="text" id="name" />
+                    <div class="col-md-12 p-5">
+                        @Html.Hidden("Id", "0")
+                        <div class="form-group m-b-10 row">
+                            <label class="col-md-3 p-l-0">Name:</label>
+                            <input class="col-md-9" type="text" id="name" />
+                        </div>
+                        <div class="form-group m-b-10 row">
+                            <label class="col-md-3 p-l-0">Url:</label>
+                            <input class="col-md-9" type="text" id="url" />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Url:</label>
-                        <input type="text" id="url" />
-                    </div>
-                </div>
+               </div>
             </form>
-            <div class="modal-footer">
-                <input type="button" id="add-link-btn" class="btn btn-default" value="Add" />
+            <div class="modal-footer" style="border-top:none;">
+                <input type="button" id="save-link-btn" class="btn btn-default" value="Save" />
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

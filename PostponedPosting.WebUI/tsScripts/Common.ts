@@ -12,4 +12,9 @@
             return true;
         return false;
     }
+
+    static hightLinght(item) {
+        $(item).addClass('highlight');
+        setTimeout(() => { $(item).removeClass('highlight'); }, 2000);
+    }
 }

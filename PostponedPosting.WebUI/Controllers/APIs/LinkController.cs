@@ -41,8 +41,15 @@ namespace PostponedPosting.WebUI.Controllers.APIs
         {
             try
             {
-                var result = LinksService.EditLink(model, User.Identity.GetUserId());
-                return Ok(result);
+                if (ModelState.IsValid)
+                {
+                    var result = LinksService.EditLink(model, User.Identity.GetUserId());
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest("Both fields are required");
+                }
             }
             catch(Exception ex)
             {

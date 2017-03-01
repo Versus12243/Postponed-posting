@@ -40,6 +40,15 @@ class ManageLinks {
                         toastr.error(JSON.parse(response.responseText).Message);
                     })
                 });
+                $('.edit-link').off().on('click', function (evt) {
+                    var data = dt.row($(this).parents('tr')).data();
+                    $('#modal-edit-link #Id').val(data['Id']);
+                    $('#name').val(data['Name']);
+                    $('#url').val(data['Url']);
+                    $('#GroupId').val(data['GroupId']);
+                    $('#modal-edit-link .modal-title').html('Edit link');
+                    $('#modal-edit-link').modal('show');
+                });
             }
         });
 
@@ -58,16 +67,27 @@ class ManageLinks {
     }
 
     editLink(dt) {
+        var data = {
+            Id: $('#modal-edit-link #Id').val(),
+            Name: $('#name').val(),
+            Url: $('#url').val(),
+            GroupId: $('#GroupId').val(),
+            DateOfCreate: null
+        };
+        if (Common.IsNullOrEmpty(data.Name)) {
+            Common.hightLinght($('#name'));
+            toastr.error('Name field is required');
+            return;
+        }
+        if (Common.IsNullOrEmpty(data.Url)) {
+            Common.hightLinght($('#url'));
+            toastr.error('Url field is required');
+            return;
+        }
         $.ajax({
             type: 'POST',
             url: '/api/Links/EditLink/',
-            data: {
-                Id: $('#modal-edit-link #Id').val(),
-                Name: $('#name').val(),
-                Url: $('#url').val(),
-                GroupId: $('#GroupId').val(),
-                DateOfCreate: null
-            }
+            data: data
         }).done(function (response) {
             dt.ajax.reload();
             $('#modal-edit-link').modal('hide');
@@ -83,11 +103,16 @@ class ManageLinks {
 window.onload = () => {
     var manageLinks = new ManageLinks();
     var dt = manageLinks.initDataTable();
-    $('#add-link').click(() => { $('#modal-edit-link').modal('show'); $('#modal-edit-link #Id').val('0');});
-    $('#add-link-btn').click(() => { manageLinks.editLink(dt); });
+    $('#add-link').click(() => { $('#modal-edit-link .modal-title').html('Create link'); $('#modal-edit-link').modal('show'); $('#modal-edit-link #Id').val('0');});
+    $('#save-link-btn').click(() => { manageLinks.editLink(dt); });
+    $('#edit-link-form').submit((evt) => { evt.preventDefault(); manageLinks.editLink(dt); })
     $('#showAllLinks').click(() => { dt.ajax.reload(); });    
-    $('#editLink').click(() => { });
     $('#modal-edit-link').on('hidden.bs.modal', function () {
         $('#modal-edit-link #Id').val('');
+        (<HTMLFormElement>document.getElementById('edit-link-form')).reset();
     });
+    $('#showAllLinks').parent().find('span').click(() => { $('#showAllLinks').click() });
+    toastr.options = {
+        "preventDuplicates": true
+    };
 }
