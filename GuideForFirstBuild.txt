@@ -1,0 +1,7 @@
+1. Create copy of ~/postponedposting.webui/app_start/ninjectwebcommon.cs
+2. In nuget package manager console run next commands:
+                                                        Update-Package -reinstall -Project PostponedPosting.WebUI
+                                                        Update-Package -reinstall -Project PostponedPosting.SeleniumApp
+3. Replace code in file ~/postponedposting.webui/scripts/typings/bootstrap.v3.datetimepicker/bootstrap.v3.datetimepicker-3.0.0.d.ts on code from https://github.com/retyped/bootstrap.v3.datetimepicker-tsd-ambient/blob/master/bootstrap.v3.datetimepicker.d.ts
+4. Remove file ~/postponedposting.webui/scripts/typings/bootstrap.v3.datetimepicker/index.d.ts 
+5. Replace ~/postponedposting.webui/app_start/ninjectwebcommon.cs on copy from first step
