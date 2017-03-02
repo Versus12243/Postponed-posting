@@ -332,11 +332,15 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
 
             if(user != null)
             {
-                var post = PostRepository.Find(p => p.Id == id && p.Status == EntityStatus.Active);
+                var post = PostRepository.Find(p => p.Id == id);
 
                 if(post != null)
                 {
-                    post.Status = EntityStatus.Deleted;
+                    if(post.Status == EntityStatus.Active)
+                        post.Status = EntityStatus.Deleted;
+                    else if(post.Status == EntityStatus.Deleted)
+                        post.Status = EntityStatus.Disabled;
+
                     post.SendingStatus = PostStatus.Suspended;
                     PostRepository.Update(post);
                     return post.Id;

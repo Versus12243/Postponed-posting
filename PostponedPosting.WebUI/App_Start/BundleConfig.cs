@@ -51,7 +51,8 @@ namespace PostponedPosting.WebUI
                 "~/Scripts/Custom/Common.js",
                 "~/Scripts/bootstrap-datetimepicker.js",
                 "~/Scripts/locales/bootstrap-datepicker.en-GB.min.js",
-                "~/Scripts/Custom/MangePosting.js"));
+                "~/Scripts/Custom/MangePosting.js",
+                "~/Scripts/Custom/Models/LinkModel.js"));
 
             bundles.Add(new ScriptBundle("~/custom/ManageSNs/scripts").Include(
                 "~/Scripts/Custom/ManageSN.js"));

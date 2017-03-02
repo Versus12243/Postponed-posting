@@ -2,6 +2,7 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using PostponedPosting.Domain.Entities.PostModels;
+using PostponedPosting.SeleniumApp.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace PostponedPosting.SeleniumApp
 
             if (count > 0)
             {
-                ThreadSender senderThread = new ThreadSender();
+                FacebookThreadSender senderThread = new FacebookThreadSender();
                 senderThread.ThreadDone += HandleThreadDone;
                 senderThread.Driver = driver;
 

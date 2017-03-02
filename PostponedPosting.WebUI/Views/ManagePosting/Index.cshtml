@@ -71,29 +71,42 @@
                             </div>
                         </div>
                         <div id="post-preview" class="tab-pane fade scroll-v-auto h-430-strong">
+                            <div class="post-edit-popup-preview-tab-overload"></div>
+                            <div class="loader" style="position: absolute; top: 35%; z-index: 5; left: 32%; width: 200px; height: 200px;"></div>
                             <div id="preview-container">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Text of post</div>
+                                    <div class="panel-body" id="post-content-preview">
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Attachments preview</div><div class="panel-body">
+                                        <div id="post-link-info-preview" style="margin: 0 auto; width: 476px;">
+                                        </div>
+                                    </div>
+                                 </div>
                             </div>
-                        </div> 
-                        <div id="post-groups-of-links" class="tab-pane fade scroll-v-auto h-430-strong">
-                            <h3>Selection groups of links</h3>
-                            <div>
-                                <table class="table table-bordered table-hover" id="groups-of-links-table-dt">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th></th>
-                                            <th>Name of group</th>
-                                            <th>Selection</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                       
-                    </div>
-            </form>
+                       </div>
+                                        <div id="post-groups-of-links" class="tab-pane fade scroll-v-auto h-430-strong">
+                                            <h3>Selection groups of links</h3>
+                                            <div>
+                                                <table class="table table-bordered table-hover" id="groups-of-links-table-dt">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Id</th>
+                                                            <th></th>
+                                                            <th>Name of group</th>
+                                                            <th>Selection</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+</form>
                 <div class="modal-footer text-center-strong">
                     <input type="button" id="create-post-continue-btn" class="btn btn-default" value="Next >"/>
                     @*<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@

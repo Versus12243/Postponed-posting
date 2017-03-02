@@ -738,6 +738,7 @@
     <TypeScriptCompile Include="tsScripts\ManageLinksGroups.ts" />
     <TypeScriptCompile Include="tsScripts\ManageSN.ts" />
     <TypeScriptCompile Include="tsScripts\MangePosting.ts" />
+    <TypeScriptCompile Include="tsScripts\Models\LinkModel.ts" />
     <TypeScriptCompile Include="tsScripts\Models\User.ts" />
   </ItemGroup>
   <ItemGroup>

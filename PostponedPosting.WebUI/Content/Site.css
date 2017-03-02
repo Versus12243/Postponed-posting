@@ -52,6 +52,14 @@ textarea {
     margin-bottom: 10px;
 }
 
+.m-r-5{
+    margin-right: 5px;
+}
+
+.m-t-5{
+    margin-top: 5px;
+}
+
 .m-t-10{
     margin-top: 10px;
 }
@@ -100,13 +108,38 @@ tr.shown td.details-control {
     width: 158px;
     height: 158px;    
     background-repeat: no-repeat !important;
+    border: #ddd 1px solid;
 }
 
 .facebook-img{
     width:476px;
     height:249px;
     background-repeat: no-repeat !important;
-    margin-bottom: 10px !important;
+    border: #ddd 1px solid;
+}
+
+.loader {
+    border: 20px solid #f3f3f3; /* Light grey */
+    border-top: 20px solid #3498db;
+    border-bottom: 20px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+.post-edit-popup-preview-tab-overload{
+    width: 568px;
+    height: 430px;
+    background: grey; 
+    position: absolute; 
+    z-index: 5; 
+    opacity: 0.7
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 
