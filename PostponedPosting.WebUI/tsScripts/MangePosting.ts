@@ -9,6 +9,10 @@ class ManagePosting {
     static ReplaceLinksInterval = null;
     static TimeToReplaceLinks = 5;
     static TimeToReplaseStartTimer = 0;
+    static valid = [];
+    static countds = 0;
+    static biggestImage = null;
+    static biggestSize = 0;
 
     getAccessToken() {
         //POST / oauth / access_token HTTP/ 1.1
@@ -101,16 +105,19 @@ class ManagePosting {
                 $($('[data-toggle="tab"]')[1]).click();
                 return;
             }
+            else if ($('#post-preview').hasClass('active')) {
+                $($('[data-toggle="tab"]')[2]).click();
+                return;
+            }
             else
                 this.validatePostData();
         }
-        else if ($(target).attr('href') == "#post-main-options") {
+        else if ($(target).attr('href') == "#post-main-options" || $(target).attr('href') == "#post-preview") {
             $('#create-post-continue-btn').attr('value', 'Next >');
             $('#create-post-continue-btn').removeClass('disabled');
         }
         else {
             $('#create-post-continue-btn').attr('value', 'Save');
-            //$('#create-post-continue-btn').addClass('disabled');
             setTimeout(() => {
                 this.initSelectedGroupsTable();
             }, 200);
@@ -240,6 +247,11 @@ class ManagePosting {
             }
             ManagePosting.TimeToReplaceLinks = 5;
             ManagePosting.TimeToReplaseStartTimer = 0;
+
+            ManagePosting.valid = [];
+            ManagePosting.countds = 0;
+            ManagePosting.biggestImage = null;
+            ManagePosting.biggestSize = 0;
         });        
     }
         
@@ -358,83 +370,94 @@ class ManagePosting {
         }, 100); 
     }
 
-    static replaceLinks() {
-      //  API Address: https://api-ssl.bitly.com
-      //  GET / v3 / shorten ? access_token = ACCESS_TOKEN & longUrl=http % 3A% 2F% 2Fgoogle.com % 2F
+    static getAllWordsFromContent() {
         var content = $('#Content').val();
         var splitByRow = content.split('\n');
         var words = [];
 
         for (var i = 0; i < splitByRow.length; i++) {
-           words = words.concat(splitByRow[i].split(' '));
+            words = words.concat(splitByRow[i].split(' '));
         }
 
         words = Array.from(new Set(words));
+        return words;
+    }
 
+    static replaceLinks() {
+      //  API Address: https://api-ssl.bitly.com
+      //  GET / v3 / shorten ? access_token = ACCESS_TOKEN & longUrl=http % 3A% 2F% 2Fgoogle.com % 2F
+
+        var words = ManagePosting.getAllWordsFromContent();
         var tempLinks = [];
+        var defaultImageExist = ManagePosting.biggestImage != null;
+        var t = 0;
 
         for (var i = 0; i < words.length; i++) {
             var re = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/i;
             if (re.test(words[i]) && words[i].indexOf("bit.ly") < 0) {
-                ManagePosting.replaceLink(words[i]);
+                if (!defaultImageExist && t == 0) {
+                    ManagePosting.replaceLink(words[i], true)
+                }
+                ManagePosting.replaceLink(words[i], false);   
+                t++;             
             }
+        }
+
+        if (t == 0) {
+            ManagePosting.valid = [];
+            ManagePosting.countds = 0;
+            ManagePosting.biggestImage = null;
+            ManagePosting.biggestSize = 0;
         }
     }
 
-    static replaceLink(link) {
+    static replaceLink(link, isSharing) {
         $.ajax({
             type: "GET",
-            url: "https://api-ssl.bitly.com/v3/shorten",
-            data: {
-                access_token: "dd1b0720edb44e71d43a9923c9ebbc397baff27a",
-                longUrl: link
-            }
+            url: "/api/Posting/ShortedLink",
+            data: { url: encodeURIComponent(link) }
         }).done(function (response) {
             var text = $('#Content').val();
             var newUrl = response.data.url;
-            if (parseInt(response.status_code) == 200) 
-                $('#Content').val(text.replace(link, newUrl));            
+            if (parseInt(response.status_code) == 200) {
+                $('#Content').val(text.replace(link, newUrl));
+                if (isSharing) {
+                    ManagePosting.requestDebugInfoAboutPost(newUrl);
+                }
+            }         
             }).fail(function (response) {
                 console.log(response);
             });
     }
 
-    static valid = [];
-    static countds = 0;
-
-    static requestDebugInfoAoutPost(id) {
+    static debugInfoForLink = null;
+    
+    static requestDebugInfoAboutPost(id) {
         
         //add method for receiving access token
         $.ajax({
-            type: "POST",
-            url: "https://graph.facebook.com/v2.8/?access_token=EAACEdEose0cBANjz2HZB8KhuIH5k12Crb869MFJRZB4SJ4pzm6AyZBEWRIyi2PcUzbQkmYZCuYiPqyNF66Eij0kAcV55Lr5hcKik7EFyGkEYoKgbcD3Linx3GRsfZCeZCPrWQ4fLrvJ3BNqz4cWkVszMUTZAFnGQSLJ6bFgq7hc5eRwyGLmFele50Pak1ooF6MZD",
-            data: {
-                debug: "warning",
-                format: "json",
-                id: id,
-                method: "post",
-                pretty: 0,
-                scrape: true,
-                suppress_http_code: 1
-            }
+            type: "GET",
+            url: "/api/Posting/GetDebugInfoAboutSharedLink",
+            data: { url: encodeURIComponent(id) }
         }).done(function (response) {    
 
-            for (var i = 0; i < response.image.length; i++){
-                var image = new Image();                
+            ManagePosting.debugInfoForLink = response;
 
-                ManagePosting.evL(image, i, response.image.length);
+            if (typeof response.image != 'undefined') {
+                for (var i = 0; i < response.image.length; i++) {
+                    var image = new Image();
 
-                image.src = response.image[i].url;
+                    ManagePosting.evL(image, i, response.image.length);
+
+                    image.src = response.image[i].url;
+                }
             }
         });
     }
-
-    static biggestImage = null;
-    static biggestSize = 0;
-
+    
     static evL(image, id, l) {
         image.addEventListener("load", function (e) {
-            if (image.width >= 200 && image.height >= 200) {
+            if (image.width >= 200 && image.height >= 200 && image.width <= 1600 && image.height <= 1600) {
                 ManagePosting.valid.push(id);
                 var size = image.height * image.width;
                 if (size > ManagePosting.biggestSize) {
@@ -444,7 +467,59 @@ class ManagePosting {
             }
             ManagePosting.countds++;
             if (ManagePosting.countds == l) {
-                debugger;
+
+                var preview = '<div class="panel panel-default"><div class="panel-heading">Text of post</div><div class="panel-body">';
+                
+                var words = ManagePosting.getAllWordsFromContent();
+
+                for (var i = 0; i < words.length; i++) {
+                    var re = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/i;
+                    if (re.test(words[i])) {
+                        preview += '<a href="' + words[i] + '">' + words[i] + '</a>'
+                    }
+                    else {
+                        preview += '<span>' + words[i] + ' ' + '</span>';
+                    } 
+                }
+
+                preview += '</div></div><div class="panel panel-default"><div class="panel-heading">Attachments preview</div><div class="panel-body">';
+
+                var small = false;
+
+                if (ManagePosting.biggestImage != null) {
+                    var r = ManagePosting.biggestImage.width / ManagePosting.biggestImage.height;
+                    if (r < 1.5 && r != 1) {
+                        preview += '<div class="facebook-img" style="background: url(\'' + ManagePosting.biggestImage.src.trim() + '\'); margin: 0 auto;"></div>';
+                    }
+                    else {
+                        var height = ManagePosting.biggestImage.height;
+                        var width = ManagePosting.biggestImage.width;
+                        if (Math.abs(height - 158) < Math.abs(width - 158)) {
+                            var p = 15800 / height;
+                            var nW = width * p / 100;
+                            var bpx = (nW - 158) / 2;
+                            preview += '<div class="facebook-small-img" style="background: url(\'' + ManagePosting.biggestImage.src.trim() + '\'); background-size: ' + r * 100 + '% !important; background-position-x: -' + bpx + 'px; display: inline-block"></div>';
+                        }
+                        else {
+                            var p = 15800 / width;
+                            var nH = height * p / 100;
+                            var bpy = (nH - 158) / 2;
+                            preview += '<div class="facebook-small-img" style="background: url(\'' + ManagePosting.biggestImage.src.trim() + '\'); background-size: ' + r * 100 + '% !important; background-position-y: -' + bpy + 'px; display: inline-block"></div>';
+                        }
+                        var small = true;
+                    }
+                }
+                preview += '<div style="display: inline-block; vertical-align: top;"><div style="' + (small ? "height: 146px" : "") + '">';
+                preview += '<div class="f-s-18 m-b-10">' + ManagePosting.debugInfoForLink.title + '</div>';
+                preview += '<div class="f-s-12 m-b-10" style="line-height: 16px;">' + ManagePosting.debugInfoForLink.description + '</div>';
+                var url = ManagePosting.debugInfoForLink.url.toLowerCase();
+                url = (url.indexOf('www.') >= 0 ? url.substring(url.indexOf('www.') + 4).toUpperCase() : (url.indexOf('//') >= 0 ? url.substring(url.indexOf('//') + 2).toUpperCase() : url.toUpperCase()));
+                if (url[url.length - 1] == '/') {
+                   url = url.slice(0, url.length - 1);
+                }
+                preview += '</div><div class="f-s-11" style="color: #90949c;">' + url + '</div></div>';
+                preview += '</div>';
+                $('#preview-container').html(preview);
             }
         });
     }

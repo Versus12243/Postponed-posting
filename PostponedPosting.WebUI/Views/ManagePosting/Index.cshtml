@@ -26,8 +26,8 @@
 
 
 
-<div id="modalCreatePost" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+<div id="modalCreatePost" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -39,10 +39,11 @@
                 <div class="modal-body">
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#post-main-options">Main options</a></li>
+                        <li><a data-toggle="tab" href="#post-preview">Post preview</a></li>
                         <li><a data-toggle="tab" href="#post-groups-of-links">Groups of links</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div id="post-main-options" class="tab-pane fade active in">
+                        <div id="post-main-options" class="tab-pane fade active in scroll-v-auto h-430-strong">
                             <h3>Main options of post</h3>
                             <div class="form-group">
                                 <label>Name:</label>
@@ -69,7 +70,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="post-groups-of-links" class="tab-pane fade">
+                        <div id="post-preview" class="tab-pane fade scroll-v-auto h-430-strong">
+                            <div id="preview-container">
+                            </div>
+                        </div> 
+                        <div id="post-groups-of-links" class="tab-pane fade scroll-v-auto h-430-strong">
                             <h3>Selection groups of links</h3>
                             <div>
                                 <table class="table table-bordered table-hover" id="groups-of-links-table-dt">

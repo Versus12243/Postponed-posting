@@ -32,6 +32,10 @@ textarea {
     height: 150px !important;
 }
 
+.h-430-strong{
+    height: 430px !important;
+}
+
 .max-h-150{
     max-height: 150px;
 }
@@ -79,3 +83,30 @@ tr.shown td.details-control {
 .bold{
    font-weight: 600;
 }
+
+.f-s-11{
+    font-size: 11px;
+}
+
+.f-s-12{
+    font-size: 12px;
+}
+
+.f-s-18{
+    font-size: 18px;
+}
+
+.facebook-small-img{
+    width: 158px;
+    height: 158px;    
+    background-repeat: no-repeat !important;
+}
+
+.facebook-img{
+    width:476px;
+    height:249px;
+    background-repeat: no-repeat !important;
+    margin-bottom: 10px !important;
+}
+
+
