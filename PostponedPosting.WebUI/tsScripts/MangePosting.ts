@@ -159,11 +159,11 @@ class ManagePosting {
             },
             "columns": [
                 { "data": "Id", "visible": false, "searchable": false },
-                { "data": "Name" },
-                { "data": "DateOfCreation", "className": 'text-center' },
-                { "data": "DateOfPublish", "className": 'text-center' },
-                { "data": "StatusOfSending", "className": 'text-center' },
-                { "data": "Status", "className": 'text-center' },
+                { "data": "Name", "className": "vertical-alight-middle" },
+                { "data": "DateOfCreation", "className": 'text-center vertical-alight-middle' },
+                { "data": "DateOfPublish", "className": 'text-center vertical-alight-middle' },
+                { "data": "StatusOfSending", "className": 'text-center vertical-alight-middle' },
+                { "data": "Status", "className": 'text-center vertical-alight-middle' },
                 { "data": "Actions", "searchable": false, "orderable": false, "className": 'text-center'  }
             ],
             "order": [3, "desc"],

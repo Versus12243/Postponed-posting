@@ -59,19 +59,11 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                 var cred = new UserCredentials();
                 cred.Login = CryptoService.GetEncryptedValue(user.PasswordHash, model.Login);
                 cred.Password = CryptoService.GetEncryptedValue(user.PasswordHash, model.Password);
-                cred.Status = Domain.Entities.StatusEnums.EntityStatus.Active;
-
+                cred.EntityStatus = Domain.Entities.StatusEnums.EntityStatus.Active;
+                cred.Status = Domain.Entities.StatusEnums.CredentialsStatus.Active;
                 if (usn != null)
                 {
-                    if(usn.Credentials != null)
-                    {
-                        usn.Credentials.Login = cred.Login;
-                        usn.Credentials.Password = cred.Password;                        
-                    }
-                    else
-                    {
-                        usn.Credentials = cred;
-                    }
+                    usn.Credentials = cred;
                     UserSocialNetworkRepository.Update(usn);
                 }
                 else
@@ -81,14 +73,13 @@ namespace PostponedPosting.Persistence.ApplicationService.Services
                     userSN.User = user;
                     userSN.Credentials = cred;
                     UserSocialNetworkRepository.Insert(userSN);
-                }                     
+                }
+                return cred.Id;     
             }
             else
             {
                 throw new Exception("User or social network was not found");
-            }
-
-            return 1;
+            }            
         }
     }
 }

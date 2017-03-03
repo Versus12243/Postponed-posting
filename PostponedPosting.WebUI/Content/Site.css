@@ -88,6 +88,10 @@ tr.shown td.details-control {
     background: url('DataTables/images/details_close.png') no-repeat center center;
 }
 
+.vertical-alight-middle{
+    vertical-align: middle;
+}
+
 .bold{
    font-weight: 600;
 }

@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostponedPosting.SeleniumAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostponedPosting.Persistence.ApplicationService", "PostponedPosting.Persistence.ApplicationService\PostponedPosting.Persistence.ApplicationService.csproj", "{91DE8ECB-1C86-4D24-9F8C-B5AE0B0B901A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadsTest", "ThreadsTest\ThreadsTest.csproj", "{8C0ABE4A-B3FB-462F-8496-BB19BCC435C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{91DE8ECB-1C86-4D24-9F8C-B5AE0B0B901A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91DE8ECB-1C86-4D24-9F8C-B5AE0B0B901A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91DE8ECB-1C86-4D24-9F8C-B5AE0B0B901A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C0ABE4A-B3FB-462F-8496-BB19BCC435C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C0ABE4A-B3FB-462F-8496-BB19BCC435C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C0ABE4A-B3FB-462F-8496-BB19BCC435C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C0ABE4A-B3FB-462F-8496-BB19BCC435C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

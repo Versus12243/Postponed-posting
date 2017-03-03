@@ -36,6 +36,7 @@ class ManageSN {
         }).done(function (response) {
             if (parseInt(response) > 0)
                 toastr.info("Credentials was saved");
+            $('tr#' + $('#SNId').val() + '>td:nth-child(3)').html("Active");
             $('#modalEditCredentials').modal('hide');
         })
     }

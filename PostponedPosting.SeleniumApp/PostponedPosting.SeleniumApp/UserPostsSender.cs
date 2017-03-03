@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NLog;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using PostponedPosting.Domain.Entities.PostModels;
@@ -14,20 +15,28 @@ namespace PostponedPosting.SeleniumApp
 {
     public class UserPostsSender
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         public readonly string Id = null;
         object locker = new object();
         Stack<Post> Posts = null;
         RemoveDriver removeDriverDelegate = null;
+        public readonly bool LoginSuccessful = false;
 
         private IWebDriver driver;
 
         public void SetupDriver()
         {
-            driver = new ChromeDriver();
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;
+
+            var options = new ChromeOptions();
+            options.AddArgument("--window-position=-32000,-32000");
+
+            driver = new ChromeDriver(service, options);
         }
 
         public UserPostsSender(string id, string login, string password, RemoveDriver removeDriver)
-        {
+        {           
             Id = id;
 
             removeDriverDelegate = removeDriver;
@@ -50,6 +59,18 @@ namespace PostponedPosting.SeleniumApp
                 ((IJavaScriptExecutor)driver).ExecuteScript("document.getElementById('loginbutton').click();");
                 Thread.Sleep(2000);
             #endregion
+
+            try
+            {
+                driver.FindElement(By.XPath("//button[@name = 'login']"));
+                LoginSuccessful = false;
+                logger.Error("Login failed in facebook provider for user with id " + Id);
+                driver.Dispose();
+            }
+            catch
+            {
+                LoginSuccessful = true;
+            }
         }
 
         public void AddPost(Post post)
@@ -80,6 +101,7 @@ namespace PostponedPosting.SeleniumApp
                     senderThread.Post = Posts.Pop();
                 }
                 Thread thread = new Thread(senderThread.Run);
+                thread.Name = "UserPostsSender_" + this.Id;
                 thread.Start();
             }
             else

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PostponedPosting.Domain.Core
 {
-        public interface IRepository<T> where T : class
+        public interface IRepository<T>: IDisposable where T : class
         {
             T GetById(object id);            
             void Insert(T entity);

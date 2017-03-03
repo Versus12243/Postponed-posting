@@ -12,59 +12,59 @@ using System.Threading.Tasks;
 
 namespace PostponedPosting.Persistence.Data
 {
-        public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
+    {
+        [Inject]
+        public IDataContext _context { get; set; }
+        private IDbSet<T> _entities;
+
+        public Repository(IDataContext context)
         {
-            [Inject]
-            public IDataContext _context { get; set; }
-            private IDbSet<T> _entities;
+            this._context = context;
+        }
 
-            public Repository(IDataContext context)
-            {
-                this._context = context;
-            }
+        public T GetById(object id)
+        {
+            return this.Entities.Find(id);
+        }
 
-            public T GetById(object id)
-            {
-                return this.Entities.Find(id);
-            }
+        public T Find(Expression<Func<T, bool>> predicate)
+        {
+            return this.Entities.FirstOrDefault(predicate);
+        }
 
-            public T Find(Expression<Func<T, bool>> predicate)
-            {
-                return this.Entities.FirstOrDefault(predicate);
-            }
-
-            public IQueryable<T> FindAll(Expression<Func<T, bool>> predicate)
-            {
-                return this.Entities.Where(predicate);
-            }
+        public IQueryable<T> FindAll(Expression<Func<T, bool>> predicate)
+        {
+            return this.Entities.Where(predicate);
+        }
 
         public void Insert(T entity)
+        {
+            try
             {
-                try
+                if (entity == null)
                 {
-                    if (entity == null)
-                    {
-                        throw new ArgumentNullException("entity");
-                    }
-                    this.Entities.Add(entity);
-                    this._context.SaveChanges();
+                    throw new ArgumentNullException("entity");
                 }
-                catch (DbEntityValidationException dbEx)
-                {
-                    var msg = string.Empty;
-
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            msg += string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage) + Environment.NewLine;
-                        }
-                    }
-
-                    var fail = new Exception(msg, dbEx);
-                    throw fail;
-                }
+                this.Entities.Add(entity);
+                this._context.SaveChanges();
             }
+            catch (DbEntityValidationException dbEx)
+            {
+                var msg = string.Empty;
+
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        msg += string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage) + Environment.NewLine;
+                    }
+                }
+
+                var fail = new Exception(msg, dbEx);
+                throw fail;
+            }
+        }
 
         public async Task InsertAsync(T entity)
         {
@@ -95,80 +95,86 @@ namespace PostponedPosting.Persistence.Data
         }
 
         public void Update(T entity)
+        {
+            try
             {
-                try
+                if (entity == null)
                 {
-                    if (entity == null)
-                    {
-                        throw new ArgumentNullException("entity");
-                    }
-                    this._context.SaveChanges();
+                    throw new ArgumentNullException("entity");
                 }
-                catch (DbEntityValidationException dbEx)
-                {
-                    var msg = string.Empty;
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            msg += Environment.NewLine + string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                        }
-                    }
-                    var fail = new Exception(msg, dbEx);
-                    throw fail;
-                }
+                this._context.SaveChanges();
             }
-
-            public void Delete(T entity)
+            catch (DbEntityValidationException dbEx)
             {
-                try
+                var msg = string.Empty;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
                 {
-                    if (entity == null)
+                    foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        throw new ArgumentNullException("entity");
+                        msg += Environment.NewLine + string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
-                    this.Entities.Remove(entity);
-                    this._context.SaveChanges();
                 }
-                catch (DbEntityValidationException dbEx)
-                {
-                    var msg = string.Empty;
+                var fail = new Exception(msg, dbEx);
+                throw fail;
+            }
+        }
 
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
+        public void Delete(T entity)
+        {
+            try
+            {
+                if (entity == null)
+                {
+                    throw new ArgumentNullException("entity");
+                }
+                this.Entities.Remove(entity);
+                this._context.SaveChanges();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                var msg = string.Empty;
+
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
                     {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            msg += Environment.NewLine + string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                        }
+                        msg += Environment.NewLine + string.Format("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
-                    var fail = new Exception(msg, dbEx);
-                    throw fail;
                 }
+                var fail = new Exception(msg, dbEx);
+                throw fail;
             }
+        }
 
-            public virtual IQueryable<T> Table
+        public virtual IQueryable<T> Table
+        {
+            get
             {
-                get
+                return this.Entities;
+            }
+        }
+
+        private IDbSet<T> Entities
+        {
+            get
+            {
+                if (_entities == null)
                 {
-                    return this.Entities;
+                    _entities = _context.Set<T>();
                 }
+                return _entities;
             }
+        }
 
-            private IDbSet<T> Entities
-            {
-                get
-                {
-                    if (_entities == null)
-                    {
-                        _entities = _context.Set<T>();
-                    }
-                    return _entities;
-                }
-            }
+        public IList<T> GetAll()
+        {
+            return this.Entities.ToList();
+        }
 
-            public IList<T> GetAll()
-            {
-                return this.Entities.ToList();
-            }
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }

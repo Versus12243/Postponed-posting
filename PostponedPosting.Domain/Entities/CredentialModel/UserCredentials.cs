@@ -17,6 +17,8 @@ namespace PostponedPosting.Domain.Entities.CredentialModel
 
         public string Password { get; set; }
 
-        public virtual EntityStatus Status { get; set; }                
+        public virtual EntityStatus EntityStatus { get; set; }       
+        
+        public virtual CredentialsStatus Status { get; set; }         
     }
 }
